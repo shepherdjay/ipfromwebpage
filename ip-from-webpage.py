@@ -17,7 +17,7 @@ def ip_from_webpage(url_input):
     ip_address = re.compile('(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?:\/[0-9]{1,2})?')
     data = bs4.BeautifulSoup(urlopen(url_input), 'html.parser')
     data = str(data.get_text)
-    return ip_address.findall(data)
+    return set(ip_address.findall(data))
 
 
 def input_url():
@@ -27,6 +27,7 @@ def input_url():
     url_input = ''
     while not validate_url(url_input):
         url_input = input("Please enter a url to scrape for IPs. The URL must include http:// or https://: ")
+        print('')
     address_list = ip_from_webpage(url_input)
     if address_list:
         print("\n".join(address_list))
