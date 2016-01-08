@@ -47,9 +47,9 @@ def get_webpage_text(url_input):
 
 def ip_from_string(string):
     """
-    Takes a string and extracts all IP Addresses as a SET
+    Takes a string and extracts all IP Addresses as a SET of Strings
     :param string: Any string of data
-    :return: IP Addresses as a SET
+    :return: IP Addresses as a SET of Strings
     """
     ip_address = re.compile('(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?:\/[0-9]{1,2})?')
     return set(ip_address.findall(string))
