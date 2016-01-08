@@ -11,7 +11,8 @@ import bs4
 
 def interactive_url_input():
     """
-    :return: Printed result of URL scrape
+    Interactive component of soliciting a url. Uses helper function to ensure url is valid.
+    :return: Valid URL
     """
     url_input = ''
     while not validate_url(url_input):
@@ -21,7 +22,8 @@ def interactive_url_input():
 
 
 def validate_url(url_arg):
-    """ Takes string input and validates if it is fully qualified url for passing into other functions
+    """
+    Takes string input and validates if it is fully qualified url for passing into other functions
     :param url_arg: URL to check for validation
     :return: Boolean result of validation check
     """
