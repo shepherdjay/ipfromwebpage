@@ -23,17 +23,22 @@ def interactive_url_input():
 
 def validate_url(url_arg):
     """
-    Takes string input and validates if it is fully qualified url for passing into other functions
+    Takes string input and validates url refers to a valid webpage for passing into other functions
     :param url_arg: URL to check for validation
     :return: Boolean result of validation check
     """
-    return urlparse(url_arg).scheme is not ''
+    parse = urlparse(url_arg)
+    if parse.scheme not in ['http', 'https']:
+        return False
+    if '.' not in parse.netloc:
+        return False
+    return True
 
 
 def get_webpage_text(url_input):
     """
     Extracts text of webpage and returns
-    :param url_input: Fully-qualified URL to scrape for IP Addresses
+    :param url_input: Fully-qualified webpage url to scrape for IP Addresses
     :return: Text of webpage
     """
     data = bs4.BeautifulSoup(urlopen(url_input), 'html.parser')
