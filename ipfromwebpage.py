@@ -38,7 +38,7 @@ def validate_url(url_arg):
 def get_webpage_text(url_input):
     """
     Extracts text of webpage and returns
-    :param url_input: Fully-qualified webpage url to scrape for IP Addresses
+    :param url_input: Fully-qualified webpage url to get contents of
     :return: Text of webpage
     """
     data = bs4.BeautifulSoup(urlopen(url_input), 'html.parser')
