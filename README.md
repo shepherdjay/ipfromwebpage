@@ -7,7 +7,7 @@ Takes a webpage and scrapes for IPv4 Addresses.
 
 Install requirements in requirements.txt.
 
-Run the code as `ipfromwebpage <url>` where URL is the fully qualified URL.
+Run the code as `ipfromwebpage <url>` where `<url>` is the fully qualified URL you wish to scrap for IPs.
 
 If no URL or an invalid URL is passed you will be presented with an interactive prompt.
 
