@@ -3,7 +3,13 @@
 ###Summary:
 Takes a webpage and scrapes for IPv4 Addresses.
 
-###Code Example:
+####Quickstart:
+
+Install requirements in requirements.txt.
+
+Run the code as
+
+####Code Example:
 ```
 Please enter a url to scrape for IPs. The URL must include http:// or https://: https://www.cloudflare.com/ips
 103.21.244.0/22
@@ -22,8 +28,8 @@ Please enter a url to scrape for IPs. The URL must include http:// or https://: 
 199.27.128.0/21
 ```
 
-###Requirements:
+####Requirements:
 See requirements.txt
 
-###Contributors:
+####Contributors:
 - Dharma Bellamkonda (dharmab)
