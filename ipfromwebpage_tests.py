@@ -19,12 +19,29 @@ class TestValidate_url(TestCase):
     def test_malformed_url(self):
         self.assertFalse(validate_url('http://example'))
 
+class TestValidate_Ip(TestCase):
+    def test_valid_ipv4(self):
+        self.assertTrue(validate_ip('192.168.0.1'))
+
+    def test_valid_ipv4network(self):
+        self.assertTrue(validate_ip('192.0.0.0/24'))
+
+    def test_valid_ipv6(self):
+        self.assertTrue(validate_ip('::1'))
+
+    def test_word(self):
+        self.assertFalse(validate_ip('word'))
+
+    def test_invalid(self):
+        self.assertFalse(validate_ip('999.999.999.999'))
+
+    def test_close(self):
+        self.assertFalse(validate_ip('1234.12341.12.3.3.4'))
+
 
 class TestIp_from_string(TestCase):
-    empty = set()
-
-    def test_valid_single(self):
-        self.assertEquals(ip_from_string('192.168.0.1'), {'192.168.0.1'})
+    def test_empty(self):
+        self.assertEqual(ip_from_string(''), set())
 
     def test_valid_multiple(self):
         self.assertEquals(ip_from_string('192.168.0.1 192.168.5.5'), {'192.168.0.1', '192.168.5.5'})
@@ -32,11 +49,5 @@ class TestIp_from_string(TestCase):
     def test_duplicates(self):
         self.assertEquals(ip_from_string('192.168.0.4 10.2.3.4 192.168.0.4 10.2.3.4'), {'192.168.0.4', '10.2.3.4'})
 
-    def test_word(self):
-        self.assertEquals(ip_from_string('word'), self.empty)
-
-    def test_invalid(self):
-        self.assertEquals(ip_from_string('999.999.999.999'), self.empty)
-
-    def test_close(self):
-        self.assertEquals(ip_from_string('1234.12341.12.3.3.4'), self.empty)
+    def test_newline(self):
+        self.assertEqual(ip_from_string('\n192.168.0.1\n10.0.0.1\n'), {'192.168.0.1', '10.0.0.1'})

@@ -2,7 +2,9 @@
 
 __author__ = 'Jay Shepherd'
 
+import ipaddress
 import re
+import sys
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
@@ -45,27 +47,54 @@ def get_webpage_text(url_input):
     return str(data.get_text)
 
 
+def validate_ip(ip):
+    """
+    Validates if passed string is an ipv4 or ipv6 address or network.
+    :param ip: IP Address as string
+    :return: Boolean Result
+    """
+    try:
+        ipaddress.ip_address(ip)
+        return True
+    except ValueError:
+        try:
+            ipaddress.ip_network(ip)
+            return True
+        except ValueError:
+            return False
+
+
 def ip_from_string(string):
     """
-    Takes a string and extracts all IP Addresses as a SET of Strings
+    Takes a string and extracts all valid IP Addresses as a SET of Strings
+    Uses the validate_ip helper function to achieve.
     :param string: Any string of data
-    :return: IP Addresses as a SET of Strings
+    :return: IP Addresses as a SET of Strings or Empty Set if none found
     """
-    ip_address = re.compile('(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?:\/[0-9]{1,2})?')
-    return set(ip_address.findall(string))
+    ip_regex = re.compile('(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?:\/[0-9]{1,2})?')
+    potential_ips = ip_regex.findall(string)
+    valid_ips = set()
+    for ip in potential_ips:
+        if validate_ip(ip) is True:
+            valid_ips.add(ip)
+    return valid_ips
 
 
 def main():
-    try:
-        url_input = interactive_url_input()
-        webpage_text = get_webpage_text(url_input)
-        address_list = ip_from_string(webpage_text)
-        if address_list:
-            print("\n".join(address_list))
-        else:
-            print("No ips found when scraping {}".format(url_input))
-    except KeyboardInterrupt:
-        print("\nGoodbye")
+    if len(sys.argv) == 1:
+        try:
+            url_input = interactive_url_input()
+        except KeyboardInterrupt:
+            print("\nGoodbye")
+    else:
+        url_input = sys.argv[1]
+
+    webpage_text = get_webpage_text(url_input)
+    address_list = ip_from_string(webpage_text)
+    if address_list:
+        print("\n".join(address_list))
+    else:
+        print("No ips found when scraping {}".format(url_input))
 
 
 if __name__ == '__main__':
