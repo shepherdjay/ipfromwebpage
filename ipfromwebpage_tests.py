@@ -19,6 +19,7 @@ class TestValidate_url(TestCase):
     def test_malformed_url(self):
         self.assertFalse(validate_url('http://example'))
 
+
 class TestValidate_Ip(TestCase):
     def test_valid_ipv4(self):
         self.assertTrue(validate_ip('192.168.0.1'))
@@ -41,13 +42,16 @@ class TestValidate_Ip(TestCase):
 
 class TestIp_from_string(TestCase):
     def test_empty(self):
-        self.assertEqual(ip_from_string(''), set())
+        self.assertEqual(ip_from_string(''), netaddr.IPSet())
 
     def test_valid_multiple(self):
-        self.assertEquals(ip_from_string('192.168.0.1 192.168.5.5'), {'192.168.0.1', '192.168.5.5'})
+        self.assertEquals(ip_from_string('192.168.0.1 192.168.5.5'),
+                          netaddr.IPSet(['192.168.0.1', '192.168.5.5']))
 
     def test_duplicates(self):
-        self.assertEquals(ip_from_string('192.168.0.4 10.2.3.4 192.168.0.4 10.2.3.4'), {'192.168.0.4', '10.2.3.4'})
+        self.assertEquals(ip_from_string('192.168.0.4 10.2.3.4 192.168.0.4 10.2.3.4'),
+                          netaddr.IPSet(['192.168.0.4', '10.2.3.4']))
 
     def test_newline(self):
-        self.assertEqual(ip_from_string('\n192.168.0.1\n10.0.0.1\n'), {'192.168.0.1', '10.0.0.1'})
+        self.assertEqual(ip_from_string('\n192.168.0.1\n10.0.0.1\n'),
+                         netaddr.IPSet(['192.168.0.1', '10.0.0.1']))

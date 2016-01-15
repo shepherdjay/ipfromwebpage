@@ -2,13 +2,13 @@
 
 __author__ = 'Jay Shepherd'
 
-import ipaddress
 import re
 import sys
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
 import bs4
+import netaddr
 
 
 def interactive_url_input():
@@ -54,14 +54,13 @@ def validate_ip(ip):
     :return: Boolean Result
     """
     try:
-        ipaddress.ip_address(ip)
+        if '/' in ip:
+            netaddr.IPNetwork(ip)
+        else:
+            netaddr.IPAddress(ip)
         return True
-    except ValueError:
-        try:
-            ipaddress.ip_network(ip)
-            return True
-        except ValueError:
-            return False
+    except netaddr.AddrFormatError:
+        return False
 
 
 def ip_from_string(string):
@@ -69,15 +68,15 @@ def ip_from_string(string):
     Takes a string and extracts all valid IP Addresses as a SET of Strings
     Uses the validate_ip helper function to achieve.
     :param string: Any string of data
-    :return: IP Addresses as a SET of Strings or Empty Set if none found
+    :return: IP Addresses as a netaddr.IPSet or empty netaddr.IPSet if none found
     """
     ip_regex = re.compile('(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?:\/[0-9]{1,2})?')
     potential_ips = ip_regex.findall(string)
-    valid_ips = set()
+    valid_ips = []
     for ip in potential_ips:
         if validate_ip(ip) is True:
-            valid_ips.add(ip)
-    return valid_ips
+            valid_ips.append(ip)
+    return netaddr.IPSet(valid_ips)
 
 
 def main():
@@ -92,7 +91,8 @@ def main():
     webpage_text = get_webpage_text(url_input)
     address_list = ip_from_string(webpage_text)
     if address_list:
-        print("\n".join(address_list))
+        for cidr in address_list.iter_cidrs():
+            print(cidr)
     else:
         print("No ips found when scraping {}".format(url_input))
 
