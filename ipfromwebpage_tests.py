@@ -1,4 +1,5 @@
 from unittest import TestCase
+from unittest import main as utmain
 
 from ipfromwebpage import *
 
@@ -55,3 +56,6 @@ class TestIp_from_string(TestCase):
     def test_newline(self):
         self.assertEqual(ip_from_string('\n192.168.0.1\n10.0.0.1\n'),
                          netaddr.IPSet(['192.168.0.1', '10.0.0.1']))
+
+if __name__ == "__main__":
+    utmain()
