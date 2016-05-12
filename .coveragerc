@@ -1,2 +1,5 @@
 [run]
 branch = True
+include =
+    ipfromwebpage.py
+    test_ipfromwebpage.py
