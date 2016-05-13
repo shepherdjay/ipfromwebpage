@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Nuttycomputer/ip-from-webpage.svg?branch=master)](https://travis-ci.org/Nuttycomputer/ip-from-webpage)[![Coverage Status](https://coveralls.io/repos/github/Nuttycomputer/ip-from-webpage/badge.svg?branch=master)](https://coveralls.io/github/Nuttycomputer/ip-from-webpage?branch=master)
+[![Build Status](https://travis-ci.org/Nuttycomputer/ip-from-webpage.svg?branch=master)](https://travis-ci.org/Nuttycomputer/ip-from-webpage) [![Coverage Status](https://coveralls.io/repos/github/Nuttycomputer/ip-from-webpage/badge.svg?branch=master)](https://coveralls.io/github/Nuttycomputer/ip-from-webpage?branch=master)
 
 ##ip-from-webpage
 
