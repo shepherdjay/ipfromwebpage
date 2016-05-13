@@ -2,6 +2,7 @@
 
 __author__ = 'Jay Shepherd'
 
+import argparse
 import re
 import sys
 from urllib.parse import urlparse
@@ -11,16 +12,26 @@ import bs4
 import netaddr
 
 
-def interactive_url_input():
+def check_args(args=None):
+    parser = argparse.ArgumentParser(description="IP Webpage Scraper")
+    parser.add_argument('url',
+                        type=argparse_url_type,
+                        help="URL to scrape, must be FQDN ie https://example.com")
+    return parser.parse_args(args)
+
+
+def argparse_url_type(url_to_check):
     """
-    Interactive component of soliciting a url. Uses helper function to ensure url is valid.
-    :return: Valid URL
+    This is a helper function that wires check args to validate_url
+    :param url_to_check: The URL positional argument passed from argparse
+    :return: Value if okay, otherwise raises argparse exception
     """
-    url_input = ''
-    while not validate_url(url_input):
-        url_input = input("Please enter a url to scrape for IPs. The URL must include http:// or https://: ")
-        print('')
-    return url_input
+    result = validate_url(url_to_check)
+    if result:
+        return url_to_check
+    else:
+        raise argparse.ArgumentTypeError(
+            "{} is an invalid URL, must specify fqdn, ex. https://www.example.com".format(url_to_check))
 
 
 def validate_url(url_arg):
@@ -79,23 +90,16 @@ def ip_from_string(string):
     return netaddr.IPSet(valid_ips)
 
 
-def main():
-    if len(sys.argv) == 1:
-        try:
-            url_input = interactive_url_input()
-        except KeyboardInterrupt:
-            print("\nGoodbye")
-    else:
-        url_input = sys.argv[1]
-
-    webpage_text = get_webpage_text(url_input)
+def main(url):
+    webpage_text = get_webpage_text(url)
     address_list = ip_from_string(webpage_text)
     if address_list:
         for cidr in address_list.iter_cidrs():
             print(cidr)
     else:
-        print("No ips found when scraping {}".format(url_input))
+        print("No ips found when scraping {}".format(url))
 
 
 if __name__ == '__main__':
-    main()
+    url = check_args(sys.argv[1:])
+    main(url)

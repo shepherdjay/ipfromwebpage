@@ -1,6 +1,37 @@
+import argparse
 from unittest import TestCase
 
-from ipfromwebpage import *
+import netaddr
+
+from ipfromwebpage import check_args, argparse_url_type, validate_url, validate_ip, ip_from_string
+
+
+class TestArgumentParsing(TestCase):
+    """
+    Why are we testing standard library functions?
+    Because you need practice Jay, that is what dharmab would say
+    So should I test sys as well?
+    """
+
+    def setUp(self):
+        self.good_url = 'http://example.com'
+        self.bad_url = 'example.com'
+
+    def test_no_arguments(self):
+        with self.assertRaises(SystemExit):
+            check_args()
+
+    def test_good_return(self):
+        result = check_args(self.good_url.split())
+        self.assertEqual(result.url, self.good_url)
+
+    def test_error(self):
+        with self.assertRaises(SystemExit):
+            check_args(self.bad_url)
+
+    def test_appropriate_exception_from_helper(self):
+        with self.assertRaises(argparse.ArgumentTypeError):
+            argparse_url_type(self.bad_url)
 
 
 class TestValidate_url(TestCase):
@@ -43,6 +74,10 @@ class TestValidate_Ip(TestCase):
 class TestIp_from_string(TestCase):
     def test_empty(self):
         self.assertEqual(ip_from_string(''), netaddr.IPSet())
+
+    def test_invalid_multiple(self):
+        self.assertEquals(ip_from_string('260.1.3.4 260.1.5.5'),
+                          netaddr.IPSet([]))
 
     def test_valid_multiple(self):
         self.assertEquals(ip_from_string('192.168.0.1 192.168.5.5'),
