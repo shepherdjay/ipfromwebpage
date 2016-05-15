@@ -8,11 +8,10 @@ Takes a webpage and scrapes for IPv4 Addresses. Then prints the IPs aggregated w
 Install requirements in requirements.txt.
 
 Run the code as `ipfromwebpage <url>` where `<url>` is the fully qualified URL you wish to scrap for IPs.
-If no URL or an invalid URL is passed you will be presented with an interactive prompt.
 
 ####Code Example:
 ```
-Please enter a url to scrape for IPs. The URL must include http:// or https://: https://www.cloudflare.com/ips
+ipfromwebpage.py https://www.cloudflare.com/ips
 103.21.244.0/22
 103.22.200.0/22
 103.31.4.0/22
