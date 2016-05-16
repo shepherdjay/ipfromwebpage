@@ -3,3 +3,5 @@ branch = True
 include =
     ipfromwebpage.py
     test_ipfromwebpage.py
+exclude_lines =
+    if __name__ == '__main__':
