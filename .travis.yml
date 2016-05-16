@@ -3,10 +3,13 @@ python:
     - "3.4"
     - "3.5"
     - "nightly"
+branches:
+  only:
+    - master
 install:
   - pip install -r requirements.txt
   - pip install -r requirements-test.txt
 script:
   - py.test --cov
 after_success:
-  - coveralls
+  - bash <(curl -s https://codecov.io/bash)
