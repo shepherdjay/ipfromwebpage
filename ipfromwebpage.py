@@ -22,7 +22,7 @@ def check_args(args=None):
 
 def argparse_url_type(url_to_check):
     """
-    This is a helper function that wires check args to validate_url
+    This is a helper function that wires check_args to validate_url
     :param url_to_check: The URL positional argument passed from argparse
     :return: Value if okay, otherwise raises argparse exception
     """
@@ -54,8 +54,8 @@ def get_webpage_text(url_input):
     :param url_input: Fully-qualified webpage url to get contents of
     :return: Text of webpage
     """
-    data = bs4.BeautifulSoup(urlopen(url_input), 'html.parser')
-    return str(data.get_text)
+    data = bs4.BeautifulSoup(urlopen(url_input), 'html.parser').get_text()
+    return data
 
 
 def validate_ip(ip):
@@ -101,5 +101,5 @@ def main(url):
 
 
 if __name__ == '__main__':
-    url = check_args(sys.argv[1:])
+    url = check_args(sys.argv[1:]).url
     main(url)
