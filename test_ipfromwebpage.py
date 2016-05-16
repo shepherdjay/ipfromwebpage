@@ -1,5 +1,7 @@
 import argparse
 import os
+import io
+from contextlib import redirect_stdout
 from unittest import TestCase
 from unittest.mock import patch
 
@@ -13,14 +15,20 @@ def get_path(file):
     return path
 
 
+@patch('ipfromwebpage.urlopen')
 class TestExtractWebPageData(TestCase):
+    """
+    Test case tests bs4 and performs a functional test using mock data from testfiles
+    """
+
     def setUp(self):
         with open(get_path('testfiles/test_html.html'), mode='r') as file:
             self.test_html_doc = file.read()
         with open(get_path('testfiles/test_html_expected.txt'), mode='r') as file:
             self.expected_text = file.read()
+        with open(get_path('testfiles/test_functional_expected.txt'), mode='r') as file:
+            self.expected_print = file.read()
 
-    @patch('ipfromwebpage.urlopen')
     def test_extracts_text(self, mock_open):
         """
         Tests the beautifulsoup function to ensure we are getting back the text we expect from its function.
@@ -34,6 +42,16 @@ class TestExtractWebPageData(TestCase):
         self.assertEqual(data, self.expected_text)
         self.assertEqual(mock_open.call_count, 1)
         mock_open.assert_called_once_with('http://test_html.html')
+
+    def test_functional(self, mock_open):
+        with io.StringIO() as buffer, redirect_stdout(buffer):
+            mock_open.return_value = self.test_html_doc
+
+            ipfromwebpage.main("http://test_html.html")
+
+            out = buffer.getvalue()
+
+        self.assertEqual(out, self.expected_print)
 
 
 class TestArgumentParsing(TestCase):
