@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/Nuttycomputer/ip-from-webpage.svg?branch=master)](https://travis-ci.org/Nuttycomputer/ip-from-webpage) [![Coverage Status](https://coveralls.io/repos/github/Nuttycomputer/ip-from-webpage/badge.svg?branch=master)](https://coveralls.io/github/Nuttycomputer/ip-from-webpage?branch=master)
 
 ##ip-from-webpage
+[![Build Status](https://travis-ci.org/Nuttycomputer/ip-from-webpage.svg?branch=master)](https://travis-ci.org/Nuttycomputer/ip-from-webpage) [![codecov](https://codecov.io/gh/Nuttycomputer/ip-from-webpage/branch/master/graph/badge.svg)](https://codecov.io/gh/Nuttycomputer/ip-from-webpage)
+
 
 ###Summary:
 Takes a webpage and scrapes for IPv4 Addresses. Then prints the IPs aggregated where possible.
