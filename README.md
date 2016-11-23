@@ -1,5 +1,5 @@
 ##ip-from-webpage
-[![Build Status](https://travis-ci.org/Nuttycomputer/ip-from-webpage.svg?branch=master)](https://travis-ci.org/Nuttycomputer/ip-from-webpage) [![codecov](https://codecov.io/gh/Nuttycomputer/ip-from-webpage/branch/master/graph/badge.svg)](https://codecov.io/gh/Nuttycomputer/ip-from-webpage)
+[![Build Status](https://travis-ci.org/shepherdjay/ip-from-webpage.svg?branch=master)](https://travis-ci.org/shepherdjay/ip-from-webpage) [![codecov](https://codecov.io/gh/shepherdjay/ip-from-webpage/branch/master/graph/badge.svg)](https://codecov.io/gh/shepherdjayr/ip-from-webpage)
 
 
 ###Summary:
