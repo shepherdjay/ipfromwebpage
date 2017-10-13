@@ -9,8 +9,6 @@ branches:
     - master
 install:
   - pip install -r requirements_dev.txt
-before_script:
-  - cd /home/travis/build/shepherdjay/ip-from-webpage
 script:
   - py.test --cov
 after_success:
