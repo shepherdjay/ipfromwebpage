@@ -9,6 +9,7 @@ branches:
     - master
 install:
   - pip install -r requirements_dev.txt
+  - pip install -e .
 script:
   - py.test --cov
 after_success:
