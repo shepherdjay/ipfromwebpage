@@ -1,17 +1,18 @@
-##ip-from-webpage
+## ip-from-webpage
+
 [![Build Status](https://travis-ci.org/shepherdjay/ip-from-webpage.svg?branch=master)](https://travis-ci.org/shepherdjay/ip-from-webpage) [![codecov](https://codecov.io/gh/shepherdjay/ip-from-webpage/branch/master/graph/badge.svg)](https://codecov.io/gh/shepherdjay/ip-from-webpage)
 
 
-###Summary:
+### Summary:
 Takes a webpage and scrapes for IPv4 Addresses. Then prints the IPs aggregated where possible.
 
-####Quickstart:
+#### Quickstart:
 
 Install requirements in requirements.txt.
 
 Run the code as `ipfromwebpage <url>` where `<url>` is the fully qualified URL you wish to scrap for IPs.
 
-####Code Example:
+#### Code Example:
 ```
 ipfromwebpage.py https://www.cloudflare.com/ips
 103.21.244.0/22
@@ -30,8 +31,8 @@ ipfromwebpage.py https://www.cloudflare.com/ips
 199.27.128.0/21
 ```
 
-####Requirements:
+#### Requirements:
 See requirements.txt
 
-####Contributors:
+#### Contributors:
 - Dharma Bellamkonda (dharmab)
