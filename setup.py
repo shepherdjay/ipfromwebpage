@@ -3,12 +3,6 @@ from setuptools import setup, find_packages
 with open('README.md', 'r') as file:
     long_description = file.read()
 
-with open('ipfromwebpage/requirements.txt', 'r') as file:
-    requirements = file.readlines()
-
-with open('tests/requirements-test.txt', 'r') as file:
-    requirements_test = file.readlines()
-
 setup(
     name='ip-from-webpage',
     version='1.0',
@@ -29,6 +23,5 @@ setup(
         'Programming Language :: Python :: 3.7',
     ],
     packages=find_packages(exclude=['tests*']),
-    install_requires=requirements,
-    tests_requires=requirements_test,
+    install_requires=['beautifulsoup4==4.4.0', 'netaddr == 0.7.18'],
 )

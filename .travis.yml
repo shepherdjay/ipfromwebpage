@@ -8,7 +8,9 @@ branches:
   only:
     - master
 install:
-  - pip install -e ip-from-webpage
+  - pip install -r requirements.txt
+  - pip install pytest
+  - pip install pytest-cov
 script:
   - py.test --cov
 after_success:
