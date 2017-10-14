@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import netaddr
 
-import ipfromwebpage
+from ipfromwebpage import ipfromwebpage
 
 
 def get_path(file):
@@ -15,7 +15,7 @@ def get_path(file):
     return path
 
 
-@patch('ipfromwebpage.urlopen')
+@patch('ipfromwebpage.ipfromwebpage.urlopen')
 class TestExtractWebPageData(TestCase):
     """
     Test case tests bs4 and performs a functional test using mock data from testfiles

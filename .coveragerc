@@ -1,8 +1,6 @@
 [run]
 branch = True
-include =
-    ipfromwebpage.py
-    test_ipfromwebpage.py
+source = ipfromwebpage
 
 [report]
 exclude_lines =
