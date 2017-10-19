@@ -90,15 +90,43 @@ def ip_from_string(string):
     return netaddr.IPSet(valid_ips)
 
 
+def ipv6_from_string(string):
+    """
+    Takes a string and extracts all valid IPv6 Addresses as a SET of Strings
+    Uses the validate_ip helper function to achieve.
+    :param string: Any string of data
+    :return: IPv6 Addresses as a netaddr.IPSet or empty netaddr.IPSet if none found
+    """
+
+    ipv6_regex = re.compile('((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?(\/[0-9][0-9]?|1([01][0-9]|2[0-8]))?')
+
+    potential_ipv6s = re.findall(ipv6_regex, string)
+    valid_ipv6s = []
+
+    for ipv6 in potential_ipv6s:
+        ipv6 = ipv6[0] + ipv6[75]
+        if validate_ip(ipv6) is True:
+            valid_ipv6s.append(ipv6)
+    return netaddr.IPSet(valid_ipv6s)
+
+
 def main(url):
     webpage_text = get_webpage_text(url)
     address_list = ip_from_string(webpage_text)
+    addressv6_list = ipv6_from_string(webpage_text)
     if address_list:
+        print('IPv4 addresses:')
         for cidr in address_list.iter_cidrs():
             print(cidr)
     else:
-        print("No ips found when scraping {}".format(url))
+        print("No ipv4s found when scraping {}".format(url))
 
+    if addressv6_list:
+        print('\nIPv6 addresses:')
+        for cidr in addressv6_list.iter_cidrs():
+            print(cidr)
+    else:
+        print("No ipv6s found when scraping {}".format(url))
 
 if __name__ == '__main__':
     url = check_args(sys.argv[1:]).url
