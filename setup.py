@@ -24,7 +24,7 @@ setup(
     description='Takes a webpage and outputs all ip address scope.',
     long_description=readme,
     author='Jay Shepherd',
-    author_email='jdshep89@hotmail.com',
+    author_email='shepherdjay@users.noreply.github.com',
     url='https://github.com/shepherdjay/ip-from-webpage',
 
     packages=find_packages(include=['ipfromwebpage']),
