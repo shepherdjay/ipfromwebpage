@@ -1,5 +1,6 @@
 ## ipfromwebpage
 
+[![PyPi](https://img.shields.io/pypi/v/ipfromwebpage.svg)](https://pypi.python.org/pypi/ipfromwebpage)
 [![Build Status](https://travis-ci.org/shepherdjay/ipfromwebpage.svg?branch=master)](https://travis-ci.org/shepherdjay/ipfromwebpage)
 [![codecov](https://codecov.io/gh/shepherdjay/ipfromwebpage/branch/master/graph/badge.svg)](https://codecov.io/gh/shepherdjay/ipfromwebpage)
 
