@@ -65,7 +65,7 @@ class TestExtractWebPageData(TestCase):
 
             out = buffer.getvalue()
 
-        self.assertEqual(out, "No ips found when scraping {}\n".format(self.test_url))
+        self.assertEqual(out, "No ipv4s found when scraping {}\nNo ipv6s found when scraping {}\n".format(self.test_url, self.test_url))
 
 
 class TestArgumentParsing(TestCase):

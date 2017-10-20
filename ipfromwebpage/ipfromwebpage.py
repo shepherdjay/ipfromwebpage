@@ -115,14 +115,14 @@ def main(url):
     address_list = ip_from_string(webpage_text)
     addressv6_list = ipv6_from_string(webpage_text)
     if address_list:
-        print('IPv4 addresses:')
+        print('================\nIPv4 addresses:')
         for cidr in address_list.iter_cidrs():
             print(cidr)
     else:
         print("No ipv4s found when scraping {}".format(url))
 
     if addressv6_list:
-        print('\nIPv6 addresses:')
+        print('================\nIPv6 addresses:')
         for cidr in addressv6_list.iter_cidrs():
             print(cidr)
     else:
