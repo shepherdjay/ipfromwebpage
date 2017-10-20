@@ -34,7 +34,7 @@ setup(
     zip_safe=False,
     keywords='ipfromwebpage',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
