@@ -20,7 +20,7 @@ test_requirements = [
 
 setup(
     name='ipfromwebpage',
-    version='0.1.1',
+    version='0.9.0',
     description='Takes a webpage and outputs all ip address scope.',
     long_description=readme,
     author='Jay Shepherd',
@@ -34,7 +34,7 @@ setup(
     zip_safe=False,
     keywords='ipfromwebpage',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
