@@ -128,6 +128,10 @@ def main(url):
     else:
         print("No ipv6s found when scraping {}".format(url))
 
-if __name__ == '__main__':
+def entrypoint():
     url = check_args(sys.argv[1:]).url
     main(url)
+
+
+if __name__ == '__main__':
+    entrypoint()
