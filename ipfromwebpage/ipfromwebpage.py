@@ -104,7 +104,6 @@ def ipv6_from_string(string):
     valid_ipv6s = []
 
     for ipv6 in potential_ipv6s:
-        ipv6 = ipv6[0] + ipv6[75]
         if validate_ip(ipv6) is True:
             valid_ipv6s.append(ipv6)
     return netaddr.IPSet(valid_ipv6s)
