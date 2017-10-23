@@ -98,7 +98,7 @@ def ipv6_from_string(string):
     :return: IPv6 Addresses as a netaddr.IPSet or empty netaddr.IPSet if none found
     """
 
-    ipv6_regex = re.compile('([0-9a-fA-f]{4}:)([0-9a-fA-f]{4}::/)([0-9]{2})')
+    ipv6_regex = re.compile('(?:[0-9a-fA-f]{4}:)(?:[0-9a-fA-f]{4}::/)(?:[0-9]{2})')
 
     potential_ipv6s = re.findall(ipv6_regex, string)
     valid_ipv6s = []
