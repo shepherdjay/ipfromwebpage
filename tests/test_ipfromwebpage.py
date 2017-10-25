@@ -123,9 +123,6 @@ class TestValidateIp(TestCase):
     def test_valid_ipv6(self):
         self.assertTrue(ipfromwebpage.validate_ip('::1'))
 
-    def test_valid_ipv6network(self):
-        self.assertTrue(ipfromwebpage.validate_ip('2a03:2880:2130:cf05::/64'))
-
     def test_word(self):
         self.assertFalse(ipfromwebpage.validate_ip('word'))
 
