@@ -20,7 +20,7 @@ test_requirements = [
 
 setup(
     name='ipfromwebpage',
-    version='0.9.0',
+    version='0.9.1',
     description='Takes a webpage and outputs all ip address scope.',
     long_description=readme,
     author='Jay Shepherd',
