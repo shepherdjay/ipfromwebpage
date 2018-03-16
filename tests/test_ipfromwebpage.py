@@ -60,12 +60,15 @@ class TestExtractWebPageData(TestCase):
     def test_functional_empty(self, mock_open):
         with io.StringIO() as buffer, redirect_stdout(buffer):
             mock_open.return_value = self.empty_html
+            test_url = 'http://test_html_empty.html'
 
-            ipfromwebpage.main(self.test_url)
+            ipfromwebpage.main(test_url)
 
             out = buffer.getvalue()
 
-        self.assertEqual(out, "No ipv4s found when scraping {}\nNo ipv6s found when scraping {}\n".format(self.test_url, self.test_url))
+            expected = "No ipv4s found when scraping {0}\nNo ipv6s found when scraping {0}\n".format(test_url)
+
+        self.assertEqual(expected, out)
 
 
 class TestArgumentParsing(TestCase):
@@ -122,6 +125,9 @@ class TestValidateIp(TestCase):
 
     def test_valid_ipv6(self):
         self.assertTrue(ipfromwebpage.validate_ip('::1'))
+
+    def test_valid_ipv6network(self):
+        self.assertTrue(ipfromwebpage.validate_ip('2a03:2880:2130:cf05::/64'))
 
     def test_word(self):
         self.assertFalse(ipfromwebpage.validate_ip('word'))
