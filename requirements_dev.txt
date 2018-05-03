@@ -1,4 +1,4 @@
-beautifulsoup4==4.4.0
+beautifulsoup4==4.6.0
 netaddr==0.7.18
 pytest
 pytest-cov
