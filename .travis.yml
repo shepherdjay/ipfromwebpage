@@ -7,10 +7,21 @@ python:
 branches:
   only:
     - master
+before_install:
+  - pip install poetry
 install:
-  - pip install -r requirements_dev.txt
-  - pip install -e .
+  - poetry install
 script:
-  - py.test --cov
+  - poetry run pytest --cov
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+before_deploy:
+  - poetry build
+deploy:
+  provider: pypi
+  username:
+    secure: "1Rj3HORQp0pFTQ9HUv4u23PDO/vvESK90J/Fr+YVjBKX+TK7CuKxfqHOTYNtd+wXzF2MiKydFbgOhaIL24eg4hxhmprzRv2gV3D32n5vL2kNoscMoxDjQq51ugndQNiOM4QVUerP4leXGFw3k4yCmXQxk5hkMhIswugflv7jBI6h2WgZAZms/Deho8K/bfPbbs2cbvTbUNCR0xjWqPZMRvPKMBSUzgIiEa0Q89emm6W3/Eg6wzXdbxJ/S2Gpuo3Mlgzzg6U/kmm3k3LIkChM46I8n/glPBsNx4JtTgz5ANjYavd2BICeMu3ghYLAOn1Cr33TU00FZEtbljIEA57yIw2Zvy3LZrF59cpTAcU4la5/rFZ9W6M0S+6QGOOTbErgh8dfPgZqO/kFaCzY5iATNX0stuQKLinSZAoNc3OpRMwumipjAvRNXnAWFkpivgnoAyB/zGq9E/itAarM/WhRw3EFBOym89HPVoawXNYmwIFUFOahP6NPosDihVQ5gfJADWO/lPCqJtRsw9NFHD1cA8P+ON3A4GXB0vu9cPgAFi8Gd9dwYWR6JtP3DWUt+A8Eo2qH6fqXg79Drxb5hXLtvaWJXbUhIUpSaSyfIhqPyfZ9P2dKFz6lSLVVb1Zs3hfwBOvnQ/dyBj0DgOJsDCP73r5dGqfZdj7XoKpToThs3nk="
+  password:
+    secure: "e8OvZTXpDRUMOQSvEukMhO3yVq2+Mr/+wMvBmmSnn79pzH1GOFy2Azml+UOYK9QRovM1OAlZqccsjO/fHARoQVO2/Ls+HyneA6UpnZAa5EZdqLZHfj4HTXM55pixiKJlfU5EvL6AaaEoxltHbOzS7Pn3zEoy6CCWGqQhmliTip6xUmmCFZ6z+PZqi34MCYfdr1XLzkxqqV8TD9wg4/mVgtpdWRCW1YZt5hBCtLhUo+fJ/fbIPsq5QCDxPSwxqKDr6eE2KdNIhw0Zp71Yp+vetf1lugeSfEeKrA0Yp61OWigYpICw3VliT/GYT4IsMfNmtZubujJkqKPCtYMwwBoIcoN9Cut8SgeWDTFp5FBgMBOx5+O8EcHc10EiyQym0udYUfz2ZsSIg8WODE4JLoYmpuFsQWY2QGsi3StS3P0KihlpJeBEeSlQTiQ9lpB24gN8laUksbsopnD/hMsQsIPI7JnaDglosv/55oxNZQc09ojp9vqPeD00E+xS3rikY7ZGN2tPvJMbltNd/LjkmgIV/2xf6aQfgpsYeMccQbd5z1HgXHv6P9Qig07j60iVwWyPzHuKY56pQNCZ77iN94KqyPa1njfJUePFOAgYEh1mL1Xbb0vRJjX1e5ntjTAqZqT+nHQQk7UfQrJt8fR9OwZFAI+/zwZwg5dwKGSFPPXo2/I="
+  on:
+    tags: true
