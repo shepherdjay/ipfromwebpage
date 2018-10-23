@@ -4,9 +4,6 @@ python:
     - "3.5"
     - "3.6"
     - "nightly"
-branches:
-  only:
-    - master
 before_install:
   - pip install poetry
 install:
@@ -25,3 +22,4 @@ deploy:
     secure: "e8OvZTXpDRUMOQSvEukMhO3yVq2+Mr/+wMvBmmSnn79pzH1GOFy2Azml+UOYK9QRovM1OAlZqccsjO/fHARoQVO2/Ls+HyneA6UpnZAa5EZdqLZHfj4HTXM55pixiKJlfU5EvL6AaaEoxltHbOzS7Pn3zEoy6CCWGqQhmliTip6xUmmCFZ6z+PZqi34MCYfdr1XLzkxqqV8TD9wg4/mVgtpdWRCW1YZt5hBCtLhUo+fJ/fbIPsq5QCDxPSwxqKDr6eE2KdNIhw0Zp71Yp+vetf1lugeSfEeKrA0Yp61OWigYpICw3VliT/GYT4IsMfNmtZubujJkqKPCtYMwwBoIcoN9Cut8SgeWDTFp5FBgMBOx5+O8EcHc10EiyQym0udYUfz2ZsSIg8WODE4JLoYmpuFsQWY2QGsi3StS3P0KihlpJeBEeSlQTiQ9lpB24gN8laUksbsopnD/hMsQsIPI7JnaDglosv/55oxNZQc09ojp9vqPeD00E+xS3rikY7ZGN2tPvJMbltNd/LjkmgIV/2xf6aQfgpsYeMccQbd5z1HgXHv6P9Qig07j60iVwWyPzHuKY56pQNCZ77iN94KqyPa1njfJUePFOAgYEh1mL1Xbb0vRJjX1e5ntjTAqZqT+nHQQk7UfQrJt8fR9OwZFAI+/zwZwg5dwKGSFPPXo2/I="
   on:
     tags: true
+    python: 3.6
