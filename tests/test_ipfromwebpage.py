@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import netaddr
 
-from ipfromwebpage import ipfromwebpage
+import ipfromwebpage
 
 
 def get_path(file):
@@ -144,15 +144,15 @@ class TestIpFromString(TestCase):
         self.assertEqual(ipfromwebpage.ip_from_string(''), netaddr.IPSet())
 
     def test_invalid_multiple(self):
-        self.assertEquals(ipfromwebpage.ip_from_string('260.1.3.4 260.1.5.5'),
+        self.assertEqual(ipfromwebpage.ip_from_string('260.1.3.4 260.1.5.5'),
                           netaddr.IPSet([]))
 
     def test_valid_multiple(self):
-        self.assertEquals(ipfromwebpage.ip_from_string('192.168.0.1 192.168.5.5'),
+        self.assertEqual(ipfromwebpage.ip_from_string('192.168.0.1 192.168.5.5'),
                           netaddr.IPSet(['192.168.0.1', '192.168.5.5']))
 
     def test_duplicates(self):
-        self.assertEquals(ipfromwebpage.ip_from_string('192.168.0.4 10.2.3.4 192.168.0.4 10.2.3.4'),
+        self.assertEqual(ipfromwebpage.ip_from_string('192.168.0.4 10.2.3.4 192.168.0.4 10.2.3.4'),
                           netaddr.IPSet(['192.168.0.4', '10.2.3.4']))
 
     def test_newline(self):

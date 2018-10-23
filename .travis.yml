@@ -3,14 +3,16 @@ python:
     - "3.4"
     - "3.5"
     - "3.6"
+    - "3.7"
     - "nightly"
 branches:
   only:
     - master
+before_install:
+  - pip install poetry
 install:
-  - pip install -r requirements_dev.txt
-  - pip install -e .
+  - poetry install
 script:
-  - py.test --cov
+  - poetry run pytest --cov
 after_success:
   - bash <(curl -s https://codecov.io/bash)
