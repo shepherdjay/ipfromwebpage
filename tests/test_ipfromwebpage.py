@@ -66,7 +66,7 @@ class TestExtractWebPageData(TestCase):
 
             out = buffer.getvalue()
 
-            expected = "No ipv4s found when scraping {0}\nNo ipv6s found when scraping {0}\n".format(test_url)
+            expected = "================\nIPv4 addresses:\nNo addresses found when scraping {0}\n================\nIPv6 addresses:\nNo addresses found when scraping {0}\n".format(test_url)
 
         self.assertEqual(expected, out)
 
