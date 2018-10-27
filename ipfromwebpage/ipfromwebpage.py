@@ -109,23 +109,30 @@ def ipv6_from_string(string):
     return netaddr.IPSet(valid_ipv6s)
 
 
+def print_address(address_list, url):
+    """
+    Takes a set of IPv4/IPv6 Addresses as a netaddr.IPSet and prints out
+    each address. If no addresses are in the list then an empty address
+    warning is printed for the url that was scraped.
+    :param address_list: netaddr.IPSet of addresses to be printed
+    :param url: url that the addresses were scraped from
+    :return: void
+    """
+    if address_list:
+        for cidr in address_list.iter_cidrs():
+            print(cidr)
+    else:
+        print("No addresses found when scraping {}".format(url))
+
+
 def main(url):
     webpage_text = get_webpage_text(url)
     address_list = ip_from_string(webpage_text)
     addressv6_list = ipv6_from_string(webpage_text)
-    if address_list:
-        print('================\nIPv4 addresses:')
-        for cidr in address_list.iter_cidrs():
-            print(cidr)
-    else:
-        print("No ipv4s found when scraping {}".format(url))
-
-    if addressv6_list:
-        print('================\nIPv6 addresses:')
-        for cidr in addressv6_list.iter_cidrs():
-            print(cidr)
-    else:
-        print("No ipv6s found when scraping {}".format(url))
+    print('================\nIPv4 addresses:')
+    print_address(address_list, url)
+    print('================\nIPv6 addresses:')
+    print_address(addressv6_list, url)
 
 
 def entrypoint():
