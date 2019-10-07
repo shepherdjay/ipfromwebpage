@@ -143,22 +143,21 @@ class TestValidateIp:
         assert not ipfromwebpage.validate_ip('1234.12341.12.3.3.4')
 
 
-class TestIpFromString(TestCase):
+class TestIpFromString:
     def test_empty(self):
-        self.assertEqual(ipfromwebpage.ip_from_string(''), netaddr.IPSet())
+        assert ipfromwebpage.ip_from_string('') == netaddr.IPSet()
 
     def test_invalid_multiple(self):
-        self.assertEqual(ipfromwebpage.ip_from_string('260.1.3.4 260.1.5.5'),
-                          netaddr.IPSet([]))
+        assert ipfromwebpage.ip_from_string('260.1.3.4 260.1.5.5') == netaddr.IPSet([])
 
     def test_valid_multiple(self):
-        self.assertEqual(ipfromwebpage.ip_from_string('192.168.0.1 192.168.5.5'),
-                          netaddr.IPSet(['192.168.0.1', '192.168.5.5']))
+        assert (ipfromwebpage.ip_from_string('192.168.0.1 192.168.5.5')
+                == netaddr.IPSet(['192.168.0.1', '192.168.5.5']))
 
     def test_duplicates(self):
-        self.assertEqual(ipfromwebpage.ip_from_string('192.168.0.4 10.2.3.4 192.168.0.4 10.2.3.4'),
-                          netaddr.IPSet(['192.168.0.4', '10.2.3.4']))
+        assert (ipfromwebpage.ip_from_string('192.168.0.4 10.2.3.4 192.168.0.4 10.2.3.4')
+                == netaddr.IPSet(['192.168.0.4', '10.2.3.4']))
 
     def test_newline(self):
-        self.assertEqual(ipfromwebpage.ip_from_string('\n192.168.0.1\n10.0.0.1\n'),
-                         netaddr.IPSet(['192.168.0.1', '10.0.0.1']))
+        assert (ipfromwebpage.ip_from_string('\n192.168.0.1\n10.0.0.1\n')
+                == netaddr.IPSet(['192.168.0.1', '10.0.0.1']))
