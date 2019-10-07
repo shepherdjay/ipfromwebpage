@@ -6,6 +6,7 @@ from unittest import TestCase
 from unittest.mock import patch
 
 import netaddr
+import pytest
 
 import ipfromwebpage
 
@@ -16,12 +17,19 @@ def get_path(file):
 
 
 @patch('ipfromwebpage.ipfromwebpage.urlopen')
-class TestExtractWebPageData(TestCase):
+class TestExtractWebPageData:
     """
     Test case tests bs4 and performs a functional test using mock data from testfiles
     """
+    test_url = 'http://test_html.html'
+    test_html_doc = ''
+    expected_text = ''
+    expected_print = ''
+    empty_html = ''
 
-    def setUp(self):
+    @pytest.fixture(autouse=True)
+    def set_up(self):
+        print("setting up")
         with open(get_path('testfiles/test_html.html'), mode='r') as file:
             self.test_html_doc = file.read()
         with open(get_path('testfiles/test_html_expected.txt'), mode='r') as file:
@@ -30,8 +38,6 @@ class TestExtractWebPageData(TestCase):
             self.expected_print = file.read()
         with open(get_path('testfiles/test_html_empty.html'), mode='r') as file:
             self.empty_html = file.read()
-
-        self.test_url = 'http://test_html.html'
 
     def test_extracts_text(self, mock_open):
         """
@@ -43,8 +49,8 @@ class TestExtractWebPageData(TestCase):
 
         data = ipfromwebpage.get_webpage_text(self.test_url)
 
-        self.assertEqual(data, self.expected_text)
-        self.assertEqual(mock_open.call_count, 1)
+        assert data == self.expected_text
+        assert mock_open.call_count == 1
         mock_open.assert_called_once_with(self.test_url)
 
     def test_functional_list(self, mock_open):
@@ -55,7 +61,7 @@ class TestExtractWebPageData(TestCase):
 
             out = buffer.getvalue()
 
-        self.assertEqual(out, self.expected_print)
+        assert out == self.expected_print
 
     def test_functional_empty(self, mock_open):
         with io.StringIO() as buffer, redirect_stdout(buffer):
@@ -68,7 +74,7 @@ class TestExtractWebPageData(TestCase):
 
             expected = "================\nIPv4 addresses:\nNo addresses found when scraping {0}\n================\nIPv6 addresses:\nNo addresses found when scraping {0}\n".format(test_url)
 
-        self.assertEqual(expected, out)
+        assert expected == out
 
 
 class TestArgumentParsing(TestCase):
@@ -78,9 +84,8 @@ class TestArgumentParsing(TestCase):
     So should I test sys as well?
     """
 
-    def setUp(self):
-        self.good_url = 'http://example.com'
-        self.bad_url = 'example.com'
+    good_url = 'http://example.com'
+    bad_url = 'example.com'
 
     def test_no_arguments(self):
         with self.assertRaises(SystemExit):
