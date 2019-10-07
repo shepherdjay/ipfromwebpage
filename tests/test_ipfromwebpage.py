@@ -29,7 +29,6 @@ class TestExtractWebPageData:
 
     @pytest.fixture(autouse=True)
     def set_up(self):
-        print("setting up")
         with open(get_path('testfiles/test_html.html'), mode='r') as file:
             self.test_html_doc = file.read()
         with open(get_path('testfiles/test_html_expected.txt'), mode='r') as file:
@@ -121,27 +120,27 @@ class TestValidateUrl:
         assert not ipfromwebpage.validate_url('http://example')
 
 
-class TestValidateIp(TestCase):
+class TestValidateIp:
     def test_valid_ipv4(self):
-        self.assertTrue(ipfromwebpage.validate_ip('192.168.0.1'))
+        assert ipfromwebpage.validate_ip('192.168.0.1')
 
     def test_valid_ipv4network(self):
-        self.assertTrue(ipfromwebpage.validate_ip('192.0.0.0/24'))
+        assert ipfromwebpage.validate_ip('192.0.0.0/24')
 
     def test_valid_ipv6(self):
-        self.assertTrue(ipfromwebpage.validate_ip('::1'))
+        assert ipfromwebpage.validate_ip('::1')
 
     def test_valid_ipv6network(self):
-        self.assertTrue(ipfromwebpage.validate_ip('2a03:2880:2130:cf05::/64'))
+        assert ipfromwebpage.validate_ip('2a03:2880:2130:cf05::/64')
 
     def test_word(self):
-        self.assertFalse(ipfromwebpage.validate_ip('word'))
+        assert not ipfromwebpage.validate_ip('word')
 
     def test_invalid(self):
-        self.assertFalse(ipfromwebpage.validate_ip('999.999.999.999'))
+        assert not ipfromwebpage.validate_ip('999.999.999.999')
 
     def test_close(self):
-        self.assertFalse(ipfromwebpage.validate_ip('1234.12341.12.3.3.4'))
+        assert not ipfromwebpage.validate_ip('1234.12341.12.3.3.4')
 
 
 class TestIpFromString(TestCase):
