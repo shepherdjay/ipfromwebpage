@@ -6,7 +6,7 @@
 [![Updates](https://pyup.io/repos/github/shepherdjay/ipfromwebpage/shield.svg)](https://pyup.io/repos/github/shepherdjay/ipfromwebpage/)
 
 ### Summary:
-Takes a webpage and scrapes for IPv4 Addresses. Then prints the IPs aggregated where possible.
+Takes a webpage and scrapes for IPv4 Addresses. Then prints the IPs. (aggregated where possible)
 
 #### Quickstart:
 
