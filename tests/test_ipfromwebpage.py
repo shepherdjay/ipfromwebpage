@@ -77,7 +77,7 @@ class TestExtractWebPageData:
         assert expected == out
 
 
-class TestArgumentParsing(TestCase):
+class TestArgumentParsing:
     """
     Why are we testing standard library functions?
     Because you need practice Jay, that is what dharmab would say
@@ -88,19 +88,19 @@ class TestArgumentParsing(TestCase):
     bad_url = 'example.com'
 
     def test_no_arguments(self):
-        with self.assertRaises(SystemExit):
+        with pytest.raises(SystemExit):
             ipfromwebpage.check_args()
 
     def test_good_return(self):
         result = ipfromwebpage.check_args(self.good_url.split())
-        self.assertEqual(result.url, self.good_url)
+        assert result.url == self.good_url
 
     def test_error(self):
-        with self.assertRaises(SystemExit):
+        with pytest.raises(SystemExit):
             ipfromwebpage.check_args(self.bad_url)
 
     def test_appropriate_exception_from_helper(self):
-        with self.assertRaises(argparse.ArgumentTypeError):
+        with pytest.raises(argparse.ArgumentTypeError):
             ipfromwebpage.argparse_url_type(self.bad_url)
 
 
