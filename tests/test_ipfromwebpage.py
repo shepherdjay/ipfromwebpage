@@ -104,21 +104,21 @@ class TestArgumentParsing:
             ipfromwebpage.argparse_url_type(self.bad_url)
 
 
-class TestValidateUrl(TestCase):
+class TestValidateUrl:
     def test_valid_url(self):
-        self.assertTrue(ipfromwebpage.validate_url('http://www.example.com'))
+        assert ipfromwebpage.validate_url('http://www.example.com')
 
     def test_no_protocol(self):
-        self.assertFalse(ipfromwebpage.validate_url('www.example.com'))
+        assert not ipfromwebpage.validate_url('www.example.com')
 
     def test_not_http_protocol(self):
-        self.assertFalse(ipfromwebpage.validate_url('ftp://www.example.com'))
+        assert not ipfromwebpage.validate_url('ftp://www.example.com')
 
     def test_custom_tld(self):
-        self.assertTrue(ipfromwebpage.validate_url('http://www.example.anything'))
+        assert ipfromwebpage.validate_url('http://www.example.anything')
 
     def test_malformed_url(self):
-        self.assertFalse(ipfromwebpage.validate_url('http://example'))
+        assert not ipfromwebpage.validate_url('http://example')
 
 
 class TestValidateIp(TestCase):
