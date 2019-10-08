@@ -9,3 +9,5 @@ Jay Shepherd
 * noahlvb
 * Tenzer
 * gphoon
+* Alig1493
+* paidegua
