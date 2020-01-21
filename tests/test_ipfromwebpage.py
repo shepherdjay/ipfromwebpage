@@ -4,6 +4,7 @@ import os
 from contextlib import redirect_stdout
 from unittest import TestCase
 from unittest.mock import patch
+from unittest.mock import Mock, MagicMock
 
 import netaddr
 import pytest
@@ -82,7 +83,6 @@ class TestArgumentParsing:
     Because you need practice Jay, that is what dharmab would say
     So should I test sys as well?
     """
-
     good_url = 'http://example.com'
     bad_url = 'example.com'
 
@@ -102,10 +102,19 @@ class TestArgumentParsing:
         with pytest.raises(argparse.ArgumentTypeError):
             ipfromwebpage.argparse_url_type(self.bad_url)
 
+@patch('ipfromwebpage.ipfromwebpage.sys')
+@patch('ipfromwebpage.ipfromwebpage.main')
+class TestEntryPoint:
+    def test_entrypoint(self, mock_main: MagicMock, mock_sys: MagicMock):
+        mock_sys.argv = ['ipfromwebpage','http://example.com']
+        ipfromwebpage.entrypoint()
+        mock_main.assert_called_once_with('http://example.com')
+
 
 class TestValidateUrl:
     def test_valid_url(self):
         assert ipfromwebpage.validate_url('http://www.example.com')
+        assert ipfromwebpage.validate_url('https://www.example.com')
 
     def test_no_protocol(self):
         assert not ipfromwebpage.validate_url('www.example.com')
