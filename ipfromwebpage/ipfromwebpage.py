@@ -18,12 +18,8 @@ def check_args(args=None):
     return parser.parse_args(args)
 
 
-def argparse_url_type(url_to_check):
-    """
-    This is a helper function that wires check_args to validate_url
-    :param url_to_check: The URL positional argument passed from argparse
-    :return: Value if okay, otherwise raises argparse exception
-    """
+def argparse_url_type(url_to_check: str) -> str:
+    """This is a helper function that wires check_args to validate_url"""
     result = validate_url(url_to_check)
     if result:
         return url_to_check
@@ -32,12 +28,8 @@ def argparse_url_type(url_to_check):
             "{} is an invalid URL, must specify fqdn, ex. https://www.example.com".format(url_to_check))
 
 
-def validate_url(url_arg):
-    """
-    Takes string input and validates url refers to a valid webpage for passing into other functions
-    :param url_arg: URL to check for validation
-    :return: Boolean result of validation check
-    """
+def validate_url(url_arg: str) -> bool:
+    """Takes string input and validates url refers to a valid webpage for passing into other functions"""
     parse = urlparse(url_arg)
     if parse.scheme not in ['http', 'https']:
         return False
@@ -46,22 +38,14 @@ def validate_url(url_arg):
     return True
 
 
-def get_webpage_text(url_input):
-    """
-    Extracts text of webpage and returns
-    :param url_input: Fully-qualified webpage url to get contents of
-    :return: Text of webpage
-    """
+def get_webpage_text(url_input: str) -> str:
+    """Extracts text of webpage and returns"""
     data = bs4.BeautifulSoup(urlopen(url_input), 'html.parser').get_text()
     return data
 
 
-def validate_ip(ip):
-    """
-    Validates if passed string is an ipv4 or ipv6 address or network.
-    :param ip: IP Address as string
-    :return: Boolean Result
-    """
+def validate_ip(ip: str) -> bool:
+    """Validates if passed string is an ipv4 or ipv6 address or network."""
     try:
         if '/' in ip:
             netaddr.IPNetwork(ip)
@@ -72,12 +56,10 @@ def validate_ip(ip):
         return False
 
 
-def ip_from_string(string):
+def ip_from_string(string: str) -> netaddr.IPSet:
     """
     Takes a string and extracts all valid IP Addresses as a SET of Strings
     Uses the validate_ip helper function to achieve.
-    :param string: Any string of data
-    :return: IP Addresses as a netaddr.IPSet or empty netaddr.IPSet if none found
     """
     ip_regex = re.compile('(?<!\.)(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?!\.)(?:\/[0-9]{1,2})?')
     potential_ips = ip_regex.findall(string)
@@ -88,12 +70,10 @@ def ip_from_string(string):
     return netaddr.IPSet(valid_ips)
 
 
-def ipv6_from_string(string):
+def ipv6_from_string(string: str) -> netaddr.IPSet:
     """
     Takes a string and extracts all valid IPv6 Addresses as a SET of Strings
     Uses the validate_ip helper function to achieve.
-    :param string: Any string of data
-    :return: IPv6 Addresses as a netaddr.IPSet or empty netaddr.IPSet if none found
     """
 
     ipv6_regex = re.compile(
@@ -109,23 +89,20 @@ def ipv6_from_string(string):
     return netaddr.IPSet(valid_ipv6s)
 
 
-def print_address(address_list, url):
+def print_address(address_set: netaddr.IPSet, url: str) -> None:
     """
     Takes a set of IPv4/IPv6 Addresses as a netaddr.IPSet and prints out
     each address. If no addresses are in the list then an empty address
     warning is printed for the url that was scraped.
-    :param address_list: netaddr.IPSet of addresses to be printed
-    :param url: url that the addresses were scraped from
-    :return: void
     """
-    if address_list:
-        for cidr in address_list.iter_cidrs():
+    if address_set:
+        for cidr in address_set.iter_cidrs():
             print(cidr)
     else:
         print("No addresses found when scraping {}".format(url))
 
 
-def main(url):
+def main(url: str) -> None:
     webpage_text = get_webpage_text(url)
     address_list = ip_from_string(webpage_text)
     addressv6_list = ipv6_from_string(webpage_text)
@@ -135,7 +112,7 @@ def main(url):
     print_address(addressv6_list, url)
 
 
-def entrypoint():
+def entrypoint() -> None:
     url = check_args(sys.argv[1:]).url
     main(url)
 
