@@ -13,14 +13,13 @@ classifiers = [
         'Environment :: Console',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.4"
+python = ">=3.5"
 beautifulsoup4 = "^4.4"
 netaddr = "0.7.18"
 
