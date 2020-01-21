@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ipfromwebpage"
-version = "0.9.2"
+version = "1.0.0"
 description = "Takes a webpage and outputs all ip addresses it finds"
 authors = ["Jay Shepherd <shepherdjay@users.noreply.github.com>"]
 license = "MIT"
