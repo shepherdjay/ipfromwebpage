@@ -1,0 +1,49 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@2.1.1
+
+jobs:
+  build-and-test:
+    parameters:
+      python-version:
+        type: string
+    executor: 
+      name: python/default
+      tag: << parameters.python-version >>
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run:
+          command: |
+            poetry run pytest --cov
+  pypi_publish:
+    executor: 
+      name: python/default
+      tag: "3.7"
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run:
+          command: |
+            poetry publish -u $PYPI_USERNAME -p $PYPI_PASSWORD
+
+workflows:
+  main:
+    jobs:
+      - build-and-test:
+          matrix:
+            parameters:
+              python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+      - pypi_publish:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only:
+                main
+            tags:
+              only:
+                /v.*/
