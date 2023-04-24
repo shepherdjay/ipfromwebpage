@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ipfromwebpage"
-version = "1.0.0"
+version = "1.1.0"
 description = "Takes a webpage and outputs all ip addresses it finds"
 authors = ["Jay Shepherd <shepherdjay@users.noreply.github.com>"]
 license = "MIT"
@@ -9,7 +9,7 @@ repository = 'https://github.com/shepherdjay/ip-from-webpage'
 homepage = 'https://github.com/shepherdjay/ip-from-webpage'
 keywords = ['ipfromwebpage']
 classifiers = [
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
