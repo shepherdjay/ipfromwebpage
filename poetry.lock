@@ -148,15 +148,14 @@ files = [
 
 [[package]]
 name = "netaddr"
-version = "0.7.18"
+version = "0.8.0"
 description = "A network address manipulation library for Python"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "netaddr-0.7.18-py2.py3-none-any.whl", hash = "sha256:cb305179658334eb035860e515f054504e232b832abb4efc51c04bf8a72d3574"},
-    {file = "netaddr-0.7.18.tar.gz", hash = "sha256:a1f5c9fcf75ac2579b9995c843dade33009543c04f218ff7c007b3c81695bd19"},
-    {file = "netaddr-0.7.18.zip", hash = "sha256:c64c570ac612e20e8b8a6eee72034c924fff9d76c7a46f50a9f919085f1bfbed"},
+    {file = "netaddr-0.8.0-py2.py3-none-any.whl", hash = "sha256:9666d0232c32d2656e5e5f8d735f58fd6c7457ce52fc21c98d45f2af78f990ac"},
+    {file = "netaddr-0.8.0.tar.gz", hash = "sha256:d6cc57c7a07b1d9d2e917aa8b36ae8ce61c35ba3fcd1b83ca31c5a0ee2b5a243"},
 ]
 
 [[package]]
@@ -288,4 +287,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.7"
-content-hash = "0ed1415f202384e967fd7bc7b365b9586b8954c38a7f310a0c80c1c38cc33e1e"
+content-hash = "99080be4a0e2ff85b6103309dfbb83d226f35da8ee32412be020f4e8f38367da"

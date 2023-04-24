@@ -170,3 +170,7 @@ class TestIpFromString:
     def test_newline(self):
         assert (ipfromwebpage.ip_from_string('\n192.168.0.1\n10.0.0.1\n')
                 == netaddr.IPSet(['192.168.0.1', '10.0.0.1']))
+
+    def test_exclusions(self):
+        assert (ipfromwebpage.ip_from_string('0.0.3.255 255.255.192.0')
+                == netaddr.IPSet())
