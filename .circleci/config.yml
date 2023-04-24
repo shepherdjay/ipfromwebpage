@@ -5,9 +5,12 @@ orbs:
 
 jobs:
   build-and-test:
+    parameters:
+      python-version:
+        type: string
     executor: 
       name: python/default
-      tag: "3.7"
+      tag: << parameters.python-version >>
     steps:
       - checkout
       - python/install-packages:
@@ -30,7 +33,10 @@ jobs:
 workflows:
   main:
     jobs:
-      - build-and-test
+      - build-and-test:
+          matrix:
+            parameters:
+              python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
       - pypi_publish:
           requires:
             - build-and-test
