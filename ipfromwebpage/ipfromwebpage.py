@@ -9,6 +9,11 @@ from urllib.request import urlopen
 import bs4
 import netaddr
 
+EXCLUSIONS = [
+    netaddr.IPNetwork('0.0.0.0/8'),
+    netaddr.IPNetwork('224.0.0.0/3')
+]
+
 
 def check_args(args=None):
     parser = argparse.ArgumentParser(description="IP Webpage Scraper")
@@ -66,6 +71,7 @@ def ip_from_string(string: str) -> netaddr.IPSet:
     valid_ips = []
     for ip in potential_ips:
         if validate_ip(ip) is True:
+
             valid_ips.append(ip)
     return netaddr.IPSet(valid_ips)
 
