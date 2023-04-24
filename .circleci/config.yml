@@ -37,19 +37,10 @@ workflows:
           matrix:
             parameters:
               python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
-      - hold:
-          type: approval
-          requires:
-            - build-and-test
-          filters:
-            tags:
-              only:
-                /v.*/
       - pypi_publish:
-          requires:
-            - hold
           filters:
             branches:
-              only:
-                master
+              ignore: /.*/
+            tags:
+              only: /^v.*/
 
