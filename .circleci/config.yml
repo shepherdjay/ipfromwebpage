@@ -21,7 +21,7 @@ jobs:
   pypi_publish:
     executor: 
       name: python/default
-      tag: "3.7"
+      tag: "3.9"
     steps:
       - checkout
       - python/install-packages:
@@ -36,7 +36,7 @@ workflows:
       - build-and-test:
           matrix:
             parameters:
-              python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+              python-version: ["3.9", "3.10", "3.11", "3.12"]
       - pypi_publish:
           filters:
             branches:
