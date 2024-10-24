@@ -28,7 +28,7 @@ jobs:
           pkg-manager: poetry
       - run:
           command: |
-            poetry publish -u $PYPI_USERNAME -p $PYPI_PASSWORD
+            poetry build && poetry publish -u $PYPI_USERNAME -p $PYPI_PASSWORD
 
 workflows:
   main:
