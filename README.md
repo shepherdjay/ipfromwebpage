@@ -9,7 +9,7 @@ Takes a webpage or text string and extracts IPv4 and IPv6 addresses. Then prints
 
 #### Quickstart:
 
-Install using `pip install ipfromwebpage`
+Run using `uvx ipfromwebpage`
 
 **Usage Options:**
 1. Extract IPs from a URL: `ipfromwebpage <url>` where `<url>` is the fully qualified URL you wish to scrape for IPs.
