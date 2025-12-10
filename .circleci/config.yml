@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   python: circleci/python@3.3.0
+  codecov: codecov/codecov@5.4.3
 
 jobs:
   build-and-test:
@@ -15,9 +16,15 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: uv
-      - run:
-          command: |
-            uv run pytest --cov
+      - run: uv run pytest --cov --cov-report=html --cov-report=xml --junitxml=junit.xml -o junit_family=legacy
+      - codecov/upload: 
+          files: ./coverage.xml
+          report_type: "coverage"
+      - codecov/upload: 
+          files: ./junit.xml
+          report_type: "test_results"
+      - store_artifacts:
+          path: htmlcov
   pypi_publish:
     executor: 
       name: python/default
@@ -26,9 +33,7 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: uv
-      - run:
-          command: |
-            uv build && uv publish -u $PYPI_USERNAME -p $PYPI_PASSWORD
+      - run: uv build && uv publish -u $PYPI_USERNAME -p $PYPI_PASSWORD
 
 workflows:
   main:

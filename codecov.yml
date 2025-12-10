@@ -1,0 +1,18 @@
+flag_management:
+  individual_flags:
+    - name: smart-tests
+      carryforward: true
+      carryforward_mode: "labels"
+      statuses:
+        - type: project
+        - type: patch
+
+cli:
+  plugins:
+    pycoverage:
+      report_type: "json"
+
+comment:
+  require_changes: "coverage_drop OR uncovered_patch"
+  layout: "condensed_header, condensed_files, condensed_footer" 
+  hide_project_coverage: TRUE
