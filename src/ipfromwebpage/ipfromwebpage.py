@@ -18,9 +18,25 @@ IPv4_EXCLUSIONS = netaddr.IPSet([
 def check_args(args=None):
     parser = argparse.ArgumentParser(description="IP Webpage Scraper")
     parser.add_argument('url',
+                        nargs='?',
                         type=argparse_url_type,
                         help="URL to scrape, must be FQDN ie https://example.com")
-    return parser.parse_args(args)
+    parser.add_argument('--input-string',
+                        type=str,
+                        help="Plain text string to extract IPs from (alternative to URL)")
+    parser.add_argument('--no-exclusions',
+                        action='store_true',
+                        help="Include all IP addresses, even those in reserved ranges (0.0.0.0/8, 224.0.0.0/3)")
+    
+    parsed_args = parser.parse_args(args)
+    
+    # Validate that exactly one input method is provided
+    if parsed_args.url and parsed_args.input_string:
+        parser.error("Cannot specify both URL and --input-string. Please provide only one.")
+    if not parsed_args.url and not parsed_args.input_string:
+        parser.error("Must provide either a URL or --input-string argument.")
+    
+    return parsed_args
 
 
 def argparse_url_type(url_to_check: str) -> str:
@@ -61,10 +77,14 @@ def validate_ip(ip: str) -> bool:
         return False
 
 
-def ip_from_string(string: str) -> netaddr.IPSet:
+def ip_from_string(string: str, include_excluded: bool = False) -> netaddr.IPSet:
     """
     Takes a string and extracts all valid IP Addresses as a SET of Strings
     Uses the validate_ip helper function to achieve.
+    
+    Args:
+        string: The text to search for IP addresses
+        include_excluded: If True, include IPs in reserved ranges (0.0.0.0/8, 224.0.0.0/3)
     """
     ip_regex = re.compile(r'(?<!\.)(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?!\.)(?:\/[0-9]{1,2})?')
     potential_ips = ip_regex.findall(string)
@@ -72,7 +92,11 @@ def ip_from_string(string: str) -> netaddr.IPSet:
     for ip in potential_ips:
         if validate_ip(ip) is True:
             valid_ips.append(ip)
-    return netaddr.IPSet(valid_ips) - IPv4_EXCLUSIONS
+    
+    ip_set = netaddr.IPSet(valid_ips)
+    if not include_excluded:
+        ip_set = ip_set - IPv4_EXCLUSIONS
+    return ip_set
 
 
 def ipv6_from_string(string: str) -> netaddr.IPSet:
@@ -94,32 +118,49 @@ def ipv6_from_string(string: str) -> netaddr.IPSet:
     return netaddr.IPSet(valid_ipv6s)
 
 
-def print_address(address_set: netaddr.IPSet, url: str) -> None:
+def print_address(address_set: netaddr.IPSet, source: str) -> None:
     """
     Takes a set of IPv4/IPv6 Addresses as a netaddr.IPSet and prints out
     each address. If no addresses are in the list then an empty address
-    warning is printed for the url that was scraped.
+    warning is printed for the source that was scraped.
     """
     if address_set:
         for cidr in address_set.iter_cidrs():
             print(cidr)
     else:
-        print("No addresses found when scraping {}".format(url))
+        print("No addresses found when scraping {}".format(source))
 
 
-def main(url: str) -> None:
-    webpage_text = get_webpage_text(url)
-    address_list = ip_from_string(webpage_text)
-    addressv6_list = ipv6_from_string(webpage_text)
+def main(text_content: str, source: str, no_exclusions: bool = False) -> None:
+    """
+    Extracts and prints IPv4 and IPv6 addresses from text content.
+    
+    Args:
+        text_content: The text to extract IP addresses from
+        source: A description of the source (URL or "input string") for display
+        no_exclusions: If True, include IPs in reserved ranges
+    """
+    address_list = ip_from_string(text_content, include_excluded=no_exclusions)
+    addressv6_list = ipv6_from_string(text_content)
     print('================\nIPv4 addresses:')
-    print_address(address_list, url)
+    print_address(address_list, source)
     print('================\nIPv6 addresses:')
-    print_address(addressv6_list, url)
+    print_address(addressv6_list, source)
 
 
 def entrypoint() -> None:
-    url = check_args(sys.argv[1:]).url
-    main(url)
+    args = check_args(sys.argv[1:])
+    
+    if args.url:
+        # URL provided - fetch the webpage text
+        text_content = get_webpage_text(args.url)
+        source = args.url
+    else:
+        # Text string provided directly
+        text_content = args.input_string
+        source = "input string"
+    
+    main(text_content, source, no_exclusions=args.no_exclusions)
 
 
 if __name__ == '__main__':

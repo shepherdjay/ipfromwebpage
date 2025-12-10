@@ -57,7 +57,8 @@ class TestExtractWebPageData:
         with io.StringIO() as buffer, redirect_stdout(buffer):
             mock_open.return_value = self.test_html_doc
 
-            ipfromwebpage.main(self.test_url)
+            webpage_text = ipfromwebpage.get_webpage_text(self.test_url)
+            ipfromwebpage.main(webpage_text, self.test_url)
 
             out = buffer.getvalue()
 
@@ -67,8 +68,9 @@ class TestExtractWebPageData:
         with io.StringIO() as buffer, redirect_stdout(buffer):
             mock_open.return_value = self.empty_html
             test_url = 'http://test_html_empty.html'
-
-            ipfromwebpage.main(test_url)
+            
+            webpage_text = ipfromwebpage.get_webpage_text(test_url)
+            ipfromwebpage.main(webpage_text, test_url)
 
             out = buffer.getvalue()
 
@@ -101,14 +103,44 @@ class TestArgumentParsing:
     def test_appropriate_exception_from_helper(self):
         with pytest.raises(argparse.ArgumentTypeError):
             ipfromwebpage.argparse_url_type(self.bad_url)
+    
+    def test_input_string_argument(self):
+        """Test that --input-string argument is accepted"""
+        test_string = "Server IP: 10.0.0.1"
+        result = ipfromwebpage.check_args(['--input-string', test_string])
+        assert result.input_string == test_string
+        assert result.url is None
+    
+    def test_both_url_and_input_string_error():
+        """Test that providing both URL and --input-string raises an error"""
+        with pytest.raises(SystemExit):
+            ipfromwebpage.check_args([self.good_url, '--input-string', 'test'])
+    
+    def test_neither_url_nor_input_string_error(self):
+        """Test that providing neither URL nor --input-string raises an error"""
+        with pytest.raises(SystemExit):
+            ipfromwebpage.check_args([])
+    
+    def test_no_exclusions_flag(self):
+        """Test that --no-exclusions flag is accepted"""
+        result = ipfromwebpage.check_args(['http://example.com', '--no-exclusions'])
+        assert result.no_exclusions is True
+    
+    def test_no_exclusions_with_input_string(self):
+        """Test that --no-exclusions works with --input-string"""
+        result = ipfromwebpage.check_args(['--input-string', 'test', '--no-exclusions'])
+        assert result.no_exclusions is True
+        assert result.input_string == 'test'
 
 @patch('ipfromwebpage.ipfromwebpage.sys')
+@patch('ipfromwebpage.ipfromwebpage.get_webpage_text')
 @patch('ipfromwebpage.ipfromwebpage.main')
 class TestEntryPoint:
-    def test_entrypoint(self, mock_main: MagicMock, mock_sys: MagicMock):
+    def test_entrypoint(self, mock_main: MagicMock, mock_get_webpage: MagicMock, mock_sys: MagicMock):
         mock_sys.argv = ['ipfromwebpage','http://example.com']
+        mock_get_webpage.return_value = 'mocked webpage text'
         ipfromwebpage.entrypoint()
-        mock_main.assert_called_once_with('http://example.com')
+        mock_main.assert_called_once_with('mocked webpage text', 'http://example.com', no_exclusions=False)
 
 
 class TestValidateUrl:
@@ -174,3 +206,74 @@ class TestIpFromString:
     def test_exclusions(self):
         assert (ipfromwebpage.ip_from_string('0.0.3.255 255.255.192.0')
                 == netaddr.IPSet())
+    
+    def test_exclusions_override(self):
+        """Test that excluded IPs are included when include_excluded=True"""
+        assert (ipfromwebpage.ip_from_string('0.0.3.255 255.255.192.0', include_excluded=True)
+                == netaddr.IPSet(['0.0.3.255', '255.255.192.0']))
+    
+    def test_multicast_included_with_flag(self):
+        """Test that multicast/reserved IPs (224+) are included with flag"""
+        assert (ipfromwebpage.ip_from_string('242.143.224.100 242.143.224.101', include_excluded=True)
+                == netaddr.IPSet(['242.143.224.100', '242.143.224.101']))
+
+
+class TestInputStringFunctionality:
+    """Test the --input-string functionality with various text inputs"""
+    
+    def test_main_with_text_string(self):
+        """Test main() function with text string containing IPs"""
+        test_text = "Server IPs: 10.0.0.1, 192.168.1.1, 172.16.0.0/24"
+        
+        with io.StringIO() as buffer, redirect_stdout(buffer):
+            ipfromwebpage.main(test_text, "input string")
+            out = buffer.getvalue()
+        
+        # Check that output contains expected IPs
+        assert "10.0.0.1" in out
+        assert "192.168.1.1" in out
+        assert "172.16.0.0/24" in out
+        assert "IPv4 addresses:" in out
+        assert "IPv6 addresses:" in out
+    
+    def test_main_with_empty_string(self):
+        """Test main() function with empty string"""
+        with io.StringIO() as buffer, redirect_stdout(buffer):
+            ipfromwebpage.main("", "input string")
+            out = buffer.getvalue()
+        
+        assert "No addresses found when scraping input string" in out
+    
+    def test_main_with_ipv6(self):
+        """Test main() function with text containing IPv6 addresses"""
+        test_text = "IPv6 address: 2001:db8::1"
+        
+        with io.StringIO() as buffer, redirect_stdout(buffer):
+            ipfromwebpage.main(test_text, "input string")
+            out = buffer.getvalue()
+        
+        assert "2001:db8::1" in out
+    
+    @patch('ipfromwebpage.ipfromwebpage.sys')
+    @patch('ipfromwebpage.ipfromwebpage.main')
+    def test_entrypoint_with_input_string(self, mock_main: MagicMock, mock_sys: MagicMock):
+        """Test entrypoint with --input-string argument"""
+        test_string = "Test: 10.0.0.1"
+        mock_sys.argv = ['ipfromwebpage', '--input-string', test_string]
+        
+        ipfromwebpage.entrypoint()
+        
+        # Verify main was called with the string directly (no URL fetch)
+        mock_main.assert_called_once_with(test_string, "input string", no_exclusions=False)
+    
+    def test_main_with_no_exclusions_flag(self):
+        """Test main() function with no_exclusions=True"""
+        test_text = "Reserved IPs: 242.143.224.100, 255.255.255.255"
+        
+        with io.StringIO() as buffer, redirect_stdout(buffer):
+            ipfromwebpage.main(test_text, "input string", no_exclusions=True)
+            out = buffer.getvalue()
+        
+        # Check that excluded IPs are now included
+        assert "242.143.224.100" in out
+        assert "255.255.255.255" in out
