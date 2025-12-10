@@ -111,7 +111,7 @@ class TestArgumentParsing:
         assert result.input_string == test_string
         assert result.url is None
     
-    def test_both_url_and_input_string_error():
+    def test_both_url_and_input_string_error(self):
         """Test that providing both URL and --input-string raises an error"""
         with pytest.raises(SystemExit):
             ipfromwebpage.check_args([self.good_url, '--input-string', 'test'])

@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  python: circleci/python@2.1.1
+  python: circleci/python@3.3.0
 
 jobs:
   build-and-test:
@@ -14,21 +14,21 @@ jobs:
     steps:
       - checkout
       - python/install-packages:
-          pkg-manager: poetry
+          pkg-manager: uv
       - run:
           command: |
-            poetry run pytest --cov
+            uv run pytest --cov
   pypi_publish:
     executor: 
       name: python/default
-      tag: "3.9"
+      tag: "3.10"
     steps:
       - checkout
       - python/install-packages:
-          pkg-manager: poetry
+          pkg-manager: uv
       - run:
           command: |
-            poetry build && poetry publish -u $PYPI_USERNAME -p $PYPI_PASSWORD
+            uv build && uv publish -u $PYPI_USERNAME -p $PYPI_PASSWORD
 
 workflows:
   main:
@@ -36,7 +36,7 @@ workflows:
       - build-and-test:
           matrix:
             parameters:
-              python-version: ["3.9", "3.10", "3.11", "3.12"]
+              python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
       - pypi_publish:
           filters:
             branches:
