@@ -33,7 +33,7 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: uv
-      - run: uv build && uv publish -u $PYPI_USERNAME -p $PYPI_PASSWORD
+      - run: uv build && uv publish
 
 workflows:
   main:
