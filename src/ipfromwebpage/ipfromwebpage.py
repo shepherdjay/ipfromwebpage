@@ -99,7 +99,7 @@ def ip_from_string(string: str, include_excluded: bool = False) -> netaddr.IPSet
     return ip_set
 
 
-def ipv6_from_string(string: str) -> netaddr.IPSet:
+def ipv6_from_string(string: str, include_excluded: bool = False) -> netaddr.IPSet:
     """
     Takes a string and extracts all valid IPv6 Addresses as a SET of Strings
     Uses the validate_ip helper function to achieve.
@@ -108,11 +108,11 @@ def ipv6_from_string(string: str) -> netaddr.IPSet:
     ipv6_regex = re.compile(
         r'(?<![a-zA-Z\d\.])((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?(\/[\d][\d]?[\d]?|1([01][0-9]|2[0-8]))?|(\.(\d{1,3}))(?<![a-zA-Z\d])')
 
-    potential_ipv6s = re.findall(ipv6_regex, string)
     valid_ipv6s = []
 
-    for ipv6 in potential_ipv6s:
-        ipv6 = ipv6[0] + ipv6[75]
+    for match in re.finditer(ipv6_regex, string):
+        # Strip zone ID (e.g. %eth0) which netaddr cannot parse
+        ipv6 = re.sub(r'%[^/]*', '', match.group(0))
         if validate_ip(ipv6) is True:
             valid_ipv6s.append(ipv6)
     return netaddr.IPSet(valid_ipv6s)
@@ -141,7 +141,7 @@ def main(text_content: str, source: str, no_exclusions: bool = False) -> None:
         no_exclusions: If True, include IPs in reserved ranges
     """
     address_list = ip_from_string(text_content, include_excluded=no_exclusions)
-    addressv6_list = ipv6_from_string(text_content)
+    addressv6_list = ipv6_from_string(text_content, include_excluded=no_exclusions)
     print('================\nIPv4 addresses:')
     print_address(address_list, source)
     print('================\nIPv6 addresses:')
